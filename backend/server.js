@@ -7,11 +7,13 @@ const app = express();
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log('connected to mongoDB database')
-}).catch((err)=>{
+}).catch((err)=>{  
     console.log(err)
 })
 
+app.use(express.json())
 app.use(router)
+
 
 const PORT = 3000||process.env.PORT
 
