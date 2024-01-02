@@ -7,8 +7,8 @@ const Navigation = () => {
 
         <Link to="/">
         <h1 className='w-1/3 px-10 py-5 text-3xl'>
-            <span className='font-bold text-rose-700'>Real</span>
-            <span className='font-bold text-rose-900'>Estate</span>
+            <span className='font-bold text-orange-500'>Real</span>
+            <span className='font-bold text-stome-800'>Estate</span>
         </h1>
         </Link>
         
