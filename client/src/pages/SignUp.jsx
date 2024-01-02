@@ -1,9 +1,15 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState} from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 const SignUp = () => {
 
   const[formData,setFormData] = useState({})
+  const[error,setError] = useState(null)
+  const[loading, setLoading] = useState(false)
+
+  const navigate = useNavigate();
 
   const handleChange = (e)=>{
       setFormData({
@@ -14,6 +20,7 @@ const SignUp = () => {
 
   const handleSubmit = async(e)=>{ // it is more safe because json is readable and writable by machines and computer
     e.preventDefault()
+    setLoading(true);
     const res = await fetch('/api/signUp',{
       // and if you are using axios write in script (proxy:'http://localhost/3000')
       method:'POST', 
@@ -23,7 +30,15 @@ const SignUp = () => {
       body:JSON.stringify(formData), 
     })
     const data = await res.json();
-    console.log(data)
+    if(data.success === false)
+    {
+      setError(data.message);
+      setLoading(false);
+      return;
+    }
+    setLoading(false)
+    setError(null)
+    navigate('/')
   }
   return (
     <>
@@ -44,11 +59,14 @@ const SignUp = () => {
         <input onChange={handleChange} type="password" id="password" placeholder='Enter your password' name="password" className="border border-gray-300 rounded-lg w-full px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
       </div>
       <div>
-        <button type="submit" className="w-1/3 bg-slate-500 font-bold text-white rounded-lg py-3 mt-6 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">Sign Up</button>
+        <button disabled={loading} type="submit" className="w-1/3 bg-slate-500 font-bold text-white rounded-lg py-3 mt-6 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          {loading ? 'Loading ...' : 'Sign Up'}
+        </button>
       </div>
       <div>
         <p>Already have an account!  <a href="/sign-in"><span className='text-slate-500 font-bold hover:text-slate-900 text-decoration-line: underline'>Sign In</span></a> </p>
       </div>
+      <p>{error}</p>
     </form>
   </div>
 </div>
